@@ -98,6 +98,19 @@ plugins {
 
 **有意未升级的一项**：`jvmToolchain` 保持 17。它是编译目标而非依赖版本——17 是 Gradle 9 的最低要求，用它编译的字节码能在任意 Gradle 9 环境加载；换成 25 会让插件只能在 JDK 25 上运行。
 
+## 版本
+
+本分支独立编号，从 **1.0.0** 起算，每位逢十进一（`1.0.9` 之后是 `1.1.0`），不延续上游的 `0.60.x` 序列。上游基线是 `v0.60.6`，本分支首个发布为 `v1.0.0`。
+
+版本号在两处维护，改版本时需要同时更新：
+
+| 位置 | 作用 |
+|---|---|
+| `plugins/version.txt` | 构建期读取；同时驱动 removals revision 映射的下发 |
+| `plugins/core/src/main/kotlin/de/fayard/refreshVersions/PluginVersion.kt` | 插件运行时经 `thisProjectVersion` 使用 |
+
+改完版本号构建一次，`plugins/dependencies/src/main/resources/version-to-removals-revision-mapping.txt` 会自动追加 `<版本>-><revision>` 映射行。
+
 ## 构建与验证
 
 ```bash
