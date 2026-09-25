@@ -1,0 +1,7 @@
+### Gradle template
+.gradle/
+build/
+.kotlin/
+.idea/
+!gradle-wrapper.jar
+out

@@ -1,0 +1,77 @@
+co.touchlab:kermit(-*)
+            ^^^^^^
+
+co.touchlab:stately-*
+            ^^^^^^^
+
+com.android.billingclient:billing(-*)
+    ^^^^^^^^^^^^^^^^^^^^^
+
+com.android.tools:*
+    ^^^^^^^^^^^^^.^
+
+com.apollographql.apollo3:apollo-*
+    ^^^^^^^^^^^^^
+
+com.github.chuckerteam.chucker:library(-*)
+                       ^^^^^^^
+
+com.google.android.horologist:*
+    ^^^^^^^        ^^^^^^^^^^
+
+com.louiscad.splitties:splitties-*
+             ^^^^^^^^^
+
+com.rickclephas.kmp:kmp-nativecoroutines(-*)
+    ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^
+
+com.russhwolf:multiplatform-settings(-*)
+              ^^^^^^^^^^^^^^^^^^^^^^
+
+io.arrow-kt.analysis.kotlin:io.arrow-kt.analysis.kotlin.*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+io.arrow-kt:arrow-*
+            ^^^^^
+
+io.coil-kt:coil(-*)
+   ^^^^^^^
+
+io.github.javaeden.orchid:*
+                   ^^^^^^
+
+io.insert-koin:koin-*
+          ^^^^
+
+io.ktor:*
+   ^^^^
+
+org.assertj:assertj-*
+            ^^^^^^^.^
+
+org.hamcrest:hamcrest(-*)
+    ^^^^^^^^
+
+org.http4k:http4k-*
+    ^^^^^^
+
+org.http4k:http4k-connect-*
+           ^^^^^^^^^^^^^^
+
+org.jetbrains.exposed:exposed-*
+    ^^^^^^^^^.^^^^^^^
+
+org.jetbrains.kotlinx:dataframe(-*)
+              ^^^^^^^.^^^^^^^^^
+
+org.jetbrains.kotlinx:kotlin-deeplearning(-*)
+              ^^^^^^^.       ^^^^^^^^^^^^
+
+org.jetbrains.kotlinx:lincheck(-*)
+              ^^^^^^^.^^^^^^^^
+
+org.jetbrains.kotlinx:multik(-*)
+              ^^^^^^^.^^^^^^
+
+org.kodein.di:kodein-di(-*)
+    ^^^^^^^^^

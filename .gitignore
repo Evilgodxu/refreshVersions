@@ -1,0 +1,9 @@
+### Gradle template
+.gradle/
+build/
+.kotlin/
+.idea/
+!gradle-wrapper.jar
+.DS_Store
+*.iml
+local.properties
