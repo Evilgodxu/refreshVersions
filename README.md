@@ -1,27 +1,29 @@
 # refreshVersions 本地维护分支
 
-Gradle 依赖版本巡检插件。上游已长期停更，本目录是自行维护的副本。
+[中文](README.md) | [English](README.en.md)
+
+Gradle 依赖版本巡检插件。上游已长期停更，本仓库是自行维护的副本。
 
 - 上游来源：`Splitties/refreshVersions` v0.60.6（MIT）
-- 本地路径：`C:\Android\refreshVersions`
 - 对外插件 ID：`de.fayard.refreshVersions`
+- 当前版本：`v1.0.0`
 
 ## 为什么自行维护
 
 上游最后版本 0.60.6 发布于 2025-08，此后长期停更。直接使用远程分发有两个问题：
 
-1. **源码无法用新版 Gradle 编译。** 上游用 Gradle 8.14.3 打包，源码直接引用 Gradle 内部 API。本机项目跑 Gradle 9.8，`includeBuild` 会用 9.8 现场编译源码，因此必须改。
+1. **源码无法用新版 Gradle 编译。** 上游用 Gradle 8.14.3 打包，源码直接引用 Gradle 内部 API。宿主项目使用 Gradle 9.8，`includeBuild` 会用 9.8 现场编译源码，因此必须改。
 2. **出问题无法自助修复。** 与 Gradle 新版本的兼容性只能等上游，而上游已无人维护。
 
 实测印证：Gradle 的 `Dependency` 接口在 9.x 中移除了 `contentEquals`，上游源码因此编译失败——这正是必须 fork 的直接原因。
 
 ## 接入方式
 
-项目 `settings.gradle.kts`：
+宿主项目的 `settings.gradle.kts`：
 
 ```kotlin
 pluginManagement {
-    includeBuild("../refreshVersions/plugins")
+    includeBuild("../refreshVersions/plugins")   // 指向本仓库的 plugins 目录
 }
 
 plugins {
@@ -29,7 +31,7 @@ plugins {
 }
 ```
 
-构建时由项目侧的 Gradle 编译本目录源码，插件不再从 Maven 仓库下载。
+构建时由宿主项目的 Gradle 编译本仓库源码，插件不再从 Maven 仓库下载。
 
 ## 任务一览
 
@@ -75,14 +77,14 @@ plugins {
 
 ## 环境要求
 
-- **Gradle 9.8.0**：wrapper 已对齐到该版本（`distributionUrl`、`distributionSha256Sum`、`gradle-wrapper.jar`、`gradlew` 全部同步更新），主项目亦为 9.8.0。
-- **JDK 17**：编译基线。Gradle 9 要求 Java 17+，用 17 编译可保证插件在任何 Gradle 9 环境加载；本机另有 JDK 25，未采用。
+- **Gradle 9.8.0**：wrapper 已对齐到该版本（`distributionUrl`、`distributionSha256Sum`、`gradle-wrapper.jar`、`gradlew` 全部同步更新）。
+- **JDK 17**：编译基线。Gradle 9 要求 Java 17+，用 17 编译可保证插件在任何 Gradle 9 环境加载。
 
 ## 技术栈版本
 
-上游依赖停留在 2020~2023 年，本地维护分支已对齐到当前最新稳定版（2026-09 核实）：
+上游依赖停留在 2020~2023 年，本分支已对齐到当前最新稳定版（2026-09 核实）：
 
-| 依赖 | 上游 | 本地维护 | 跨度 |
+| 依赖 | 上游 | 本分支 | 跨度 |
 |---|---|---|---|
 | Gradle | 8.14.3 | **9.8.0** | |
 | kotlinx-coroutines-core | 1.7.3 | **1.11.0** | |
@@ -96,7 +98,7 @@ plugins {
 
 升级后 core 135 个、dependencies 24 个测试全部通过。
 
-**有意未升级的一项**：`jvmToolchain` 保持 17。它是编译目标而非依赖版本——17 是 Gradle 9 的最低要求，用它编译的字节码能在任意 Gradle 9 环境加载；换成 25 会让插件只能在 JDK 25 上运行。
+**有意未升级的一项**：`jvmToolchain` 保持 17。它是编译目标而非依赖版本——17 是 Gradle 9 的最低要求，用它编译的字节码能在任意 Gradle 9 环境加载；换成更高版本会让插件只能在对应 JDK 上运行。
 
 ## 版本
 
@@ -113,28 +115,26 @@ plugins {
 
 ## 构建与验证
 
+以下命令均在本仓库根目录执行：
+
 ```bash
 # 编译插件
-./gradlew -p C:/Android/refreshVersions/plugins :refreshVersions:jar :refreshVersions-core:jar
+./gradlew -p plugins :refreshVersions:jar :refreshVersions-core:jar
 
-# 运行上游测试
-./gradlew -p C:/Android/refreshVersions/plugins :refreshVersions-core:test
+# 运行测试
+./gradlew -p plugins :refreshVersions-core:test :refreshVersions:test
 
-# 接入后，在主项目中巡检依赖版本
-cd C:/Android/YiChaoMusic && ./gradlew refreshVersions
+# 接入后，在宿主项目中巡检依赖版本
+cd <宿主项目> && ./gradlew refreshVersions
 ```
 
-巡检结果以 `## ⬆ = "x.y.z"` 注释写入主项目的 `gradle/libs.versions.toml`，是否升级由人工决定。
+巡检结果以 `## ⬆ = "x.y.z"` 注释写入宿主项目的 `gradle/libs.versions.toml`，是否升级由人工决定。
 
 ## 已知限制
 
 1. **构建链不碰远程，但不等于完全离线。** 编译 `core` 仍需从仓库拉取 coroutines / okhttp / retrofit2 / moshi；执行巡检任务时也需联网查询版本元数据——那是插件功能本身。
 2. **Windows 长路径。** 测试资源中存在长度超过 225 字符的路径，解压与打包需加 `\\?\` 扩展前缀，否则触发 `MAX_PATH`。
-3. **同步上游只能靠源码包。** 本机 `git` 无法访问 github.com（证书吊销检查失败），但 `codeload.github.com` 可用。
-
-## 恢复上游原始版本
-
-`C:\Android\refreshVersions-upstream-0.60.6.zip`（837 个文件）是未改动的上游源码快照，可用于找回被删内容或对比差异。
+3. **同步上游只能靠源码包。** 若环境中 `git` 无法直连 github.com（常见于证书吊销检查失败），可改用 `codeload.github.com` 下载源码包。
 
 ## 上游来源与许可
 
@@ -142,7 +142,7 @@ cd C:/Android/YiChaoMusic && ./gradlew refreshVersions
 
 - 上游仓库：<https://github.com/Splitties/refreshVersions>
 - 基线版本：`v0.60.6`（git tag）
-- 未改动的上游源码快照：`C:\Android\refreshVersions-upstream-0.60.6.zip`（837 个文件，不随本仓库分发）
+- 未改动的上游源码快照：本地留存、不随本仓库分发，可从上游 `v0.60.6` tag 重新获取
 - 许可：MIT，见 `LICENSE.txt`；版权归原作者 Jean-Michel Fayard、Louis CAD 及其贡献者所有
 - 本分支与上游的差异逐项列于上文「与上游的差异」章节
 
