@@ -108,7 +108,10 @@ internal fun VersionsPropertiesModel.writeTo(versionsPropertiesFile: File): Bool
         generatedByVersion = RefreshVersionsCorePlugin.currentVersion
     )
     val newContent = finalModel.toText()
-    if (newContent == versionsPropertiesFile.readText()) return false
+    // 本地维护分支：无版本条目可写且文件尚未创建时，不生成空文件
+    if (finalModel.sections.none { it is VersionEntry } && versionsPropertiesFile.exists().not()) return false
+    val existingContent = if (versionsPropertiesFile.exists()) versionsPropertiesFile.readText() else ""
+    if (newContent == existingContent) return false
     versionsPropertiesFile.writeText(newContent)
     return true
 }

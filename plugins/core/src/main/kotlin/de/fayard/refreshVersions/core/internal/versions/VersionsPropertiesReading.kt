@@ -9,7 +9,10 @@ import java.io.File
 internal fun VersionsPropertiesModel.Companion.readFromFile(
     versionsPropertiesFile: File = RefreshVersionsConfigHolder.versionsPropertiesFile
 ): VersionsPropertiesModel {
-    val text = synchronized(versionsPropertiesFileLock) { versionsPropertiesFile.readText() }
+    val text = synchronized(versionsPropertiesFileLock) {
+        // 本地维护分支：文件尚未创建时按空内容处理
+        if (versionsPropertiesFile.exists()) versionsPropertiesFile.readText() else ""
+    }
     return readFromText(text)
 }
 

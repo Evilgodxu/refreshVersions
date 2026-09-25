@@ -89,9 +89,8 @@ object RefreshVersionsConfigHolder {
         resettableDelegates.reset()
         this.settings = settings
 
-        this.versionsPropertiesFile = versionsPropertiesFile.also {
-            it.createNewFile() // Creates the file if it doesn't exist yet
-        }
+        // 本地维护分支：不再于配置期创建 versions.properties，仅在确有内容需要记录时才写入
+        this.versionsPropertiesFile = versionsPropertiesFile
         this.versionRejectionFilter = versionRejectionFilter
         this.artifactVersionKeyRules = artifactVersionKeyRules
         versionKeyReader = ArtifactVersionKeyReader.fromRules(

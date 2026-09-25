@@ -6,7 +6,7 @@ A Gradle plugin for inspecting dependency versions. Upstream has been unmaintain
 
 - Upstream: `Splitties/refreshVersions` v0.60.6 (MIT)
 - Plugin ID: `de.fayard.refreshVersions`
-- Current version: `v1.0.0`
+- Current version: `v1.0.1`
 
 ## Why this fork exists
 

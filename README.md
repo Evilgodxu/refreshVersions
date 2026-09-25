@@ -6,7 +6,7 @@ Gradle 依赖版本巡检插件。上游已长期停更，本仓库是自行维�
 
 - 上游来源：`Splitties/refreshVersions` v0.60.6（MIT）
 - 对外插件 ID：`de.fayard.refreshVersions`
-- 当前版本：`v1.0.0`
+- 当前版本：`v1.0.1`
 
 ## 为什么自行维护
 
